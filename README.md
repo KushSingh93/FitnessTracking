@@ -1,3 +1,4 @@
+#FitnessTracker
 A simple and effective fitness tracker that lets users log their workouts, track progress, and stay motivated.
 
 🚀 Features
