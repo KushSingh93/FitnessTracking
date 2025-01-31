@@ -2,7 +2,6 @@ package in.ongrid.fitnesstracker.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.catalina.User;
 
 import java.time.LocalDate;
 
@@ -20,7 +19,7 @@ public class Workouts {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    private Users userId;
+    private User userId;
 
     @Column(nullable = false)
     private LocalDate date;

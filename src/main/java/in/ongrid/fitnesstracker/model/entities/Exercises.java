@@ -1,34 +1,26 @@
 package in.ongrid.fitnesstracker.model.entities;
 
+import in.ongrid.fitnesstracker.model.entities.WorkoutExercises;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "exercises")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Exercises {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long exerciseId;
+    private Long id;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String name;
+    private String exerciseName;
+    private int reps;
+    private int sets;
 
-    @Column(nullable = false, length = 50)
-    private String bodyPart;
-
-    @Column(nullable = false)
-    private Float caloriesBurntPerSet;
-
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private Users userId;
-
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkoutExercises> workoutExercises = new ArrayList<>();
 }

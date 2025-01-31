@@ -1,5 +1,5 @@
 #FitnessTracker:
-A simple and effective fitness tracker that lets users log their workouts, track progress, and stay motivated.
+A simple and effective fitness tracker that lets user log their workouts, track progress, and stay motivated.
 
 🚀 Features
 Predefined Exercise Library – Includes basic exercises with descriptions & calorie burn details.
