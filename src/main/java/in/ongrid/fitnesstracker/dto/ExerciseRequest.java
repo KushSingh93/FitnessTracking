@@ -1,5 +1,6 @@
 package in.ongrid.fitnesstracker.dto;
 
+import in.ongrid.fitnesstracker.model.enums.BodyPart;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,14 +11,13 @@ import lombok.Setter;
 @Setter
 public class ExerciseRequest {
 
-    @NotBlank
+    @NotBlank(message = "Exercise name cannot be blank")
     private String exerciseName;
 
-    @NotNull
-    @Min(1)
-    private Integer reps;
+    @NotNull(message = "Body part cannot be null")
+    private BodyPart bodyPart;
 
-    @NotNull
-    @Min(1)
-    private Integer sets;
+    @NotNull  // ✅ Ensure this is required
+    private Float caloriesBurntPerSet;
+
 }

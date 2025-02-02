@@ -1,13 +1,12 @@
 package in.ongrid.fitnesstracker.dao;
 
 import in.ongrid.fitnesstracker.model.entities.Exercises;
-import in.ongrid.fitnesstracker.model.entities.User;
+import in.ongrid.fitnesstracker.model.enums.BodyPart;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Root;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,12 +16,6 @@ public class ExercisesDaoImplementation implements ExercisesDao {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @PersistenceContext
-    private UsersDao usersDao;
-
-    @PersistenceContext
-    private ExercisesDao exercisesDao;
 
     @Override
     public List<Exercises> getAllExercises() {
@@ -34,10 +27,12 @@ public class ExercisesDaoImplementation implements ExercisesDao {
         return Optional.ofNullable(entityManager.find(Exercises.class, exerciseId));
     }
 
-    @Override
-    public List<Exercises> getExercisesByBodyPart(String bodyPart) {
-        return entityManager.createQuery("SELECT e FROM Exercises e WHERE e.bodyPart = :bodyPart", Exercises.class)
-                .setParameter("bodyPart", bodyPart)
+    // ✅ Updated method to use BodyPart Enum
+
+    public List<Exercises> getExercisesByBodyPart(BodyPart bodyPart) {
+        return entityManager.createQuery(
+                        "SELECT e FROM Exercises e WHERE e.bodyPart = :bodyPart", Exercises.class)
+                .setParameter("bodyPart", bodyPart)  // Correctly passing enum as a parameter
                 .getResultList();
     }
 
@@ -49,8 +44,9 @@ public class ExercisesDaoImplementation implements ExercisesDao {
 
     @Override
     public void deleteExercise(Long exerciseId) {
-
+        Exercises exercise = entityManager.find(Exercises.class, exerciseId);
+        if (exercise != null) {
+            entityManager.remove(exercise);
+        }
     }
-
-
 }

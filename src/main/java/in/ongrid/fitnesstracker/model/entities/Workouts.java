@@ -18,8 +18,8 @@ public class Workouts {
     private Long workoutId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User userId;
+    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private LocalDate date;
@@ -29,6 +29,11 @@ public class Workouts {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDate.now();
+        if (this.createdAt == null) {
+            this.createdAt = LocalDate.now(); // ✅ Set creation date
+        }
+        if (this.date == null) {
+            this.date = LocalDate.now(); // ✅ Ensure the workout date is set
+        }
     }
 }

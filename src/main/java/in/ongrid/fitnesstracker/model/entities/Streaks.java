@@ -17,8 +17,8 @@ public class Streaks {
     private Long streakId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User userId;
+    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private LocalDate startDate;

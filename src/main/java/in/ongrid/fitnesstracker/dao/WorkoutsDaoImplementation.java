@@ -1,5 +1,6 @@
 package in.ongrid.fitnesstracker.dao;
 
+import in.ongrid.fitnesstracker.model.entities.User;
 import in.ongrid.fitnesstracker.model.entities.Workouts;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,8 +17,11 @@ public class WorkoutsDaoImplementation implements WorkoutsDao {
     private EntityManager entityManager;
 
     @Override
-    public List<Workouts> getAllWorkouts() {
-        return entityManager.createQuery("SELECT w FROM Workouts w", Workouts.class).getResultList();
+    public List<Workouts> getWorkoutsByUser(User user) {
+        return entityManager.createQuery(
+                        "SELECT w FROM Workouts w WHERE w.user = :user", Workouts.class)
+                .setParameter("user", user)
+                .getResultList();
     }
 
     @Override

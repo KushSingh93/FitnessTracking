@@ -17,11 +17,12 @@ public class FavoriteExercises {
     private Long favoriteId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
     private User user;
 
+
     @ManyToOne
-    @JoinColumn(name = "exercise_id")
+    @JoinColumn(name = "exercise_id", referencedColumnName = "exerciseId", nullable = false)
     private Exercises exercise;
 
     @Column(nullable = false, updatable = false)

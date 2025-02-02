@@ -20,11 +20,11 @@ public class WorkoutExercises {
     private Long workoutExerciseId;
 
     @ManyToOne
-    @JoinColumn(name = "workout_id", nullable = false, referencedColumnName = "workoutId")
+    @JoinColumn(name = "workout_id", referencedColumnName = "workoutId", nullable = false)
     private Workouts workout;
 
     @ManyToOne
-    @JoinColumn(name = "exercise_id", nullable = false, referencedColumnName = "exerciseId")
+    @JoinColumn(name = "exercise_id", referencedColumnName = "exerciseId", nullable = false)
     private Exercises exercise;
 
     @Column(nullable = false)
@@ -33,3 +33,4 @@ public class WorkoutExercises {
     @Column(nullable = false)
     private Integer reps;
 }
+

@@ -1,8 +1,5 @@
 package in.ongrid.fitnesstracker.controller;
 
-import in.ongrid.fitnesstracker.dao.ExercisesDaoImplementation;
-
-
 import in.ongrid.fitnesstracker.dto.ExerciseRequest;
 import in.ongrid.fitnesstracker.model.entities.Exercises;
 import in.ongrid.fitnesstracker.service.ExercisesService;
@@ -10,7 +7,6 @@ import in.ongrid.fitnesstracker.utils.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -27,7 +23,7 @@ public class ExercisesController {
     }
 
     // ✅ Get all exercises (Predefined & Custom)
-    @GetMapping("/allExercises")
+    @GetMapping("/getAllExercises")
     public ResponseEntity<List<Exercises>> getAllExercises() {
         return ResponseEntity.ok(exercisesService.getAllExercises());
     }
@@ -45,34 +41,28 @@ public class ExercisesController {
     }
 
     // ✅ Add a custom exercise
-    @RequestMapping("/exercises")
-    public class ExerciseController {
+    @PostMapping("/addExercise")
+    public ResponseEntity<Exercises> addExercise(
+            @Valid @RequestBody ExerciseRequest exerciseRequest, // Validate input fields
+            @RequestHeader("Authorization") String token) { // Get token from header
 
-        private final ExercisesService exercisesService;
+        // Extract actual JWT token (remove "Bearer " prefix)
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
 
-        public ExerciseController(ExercisesService exercisesService) {
-            this.exercisesService = exercisesService;
-        }
-
-        @PostMapping("/addExercise")
-        public ResponseEntity<Exercises> addExercise(
-                @Valid @RequestBody ExerciseRequest exerciseRequest, // Validate input fields
-                @RequestHeader("Authorization") String token) { // Get token from header
-
-            // Extract actual JWT token (remove "Bearer " prefix)
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-            String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
-
-            Exercises savedExercise = exercisesService.createExercise(exerciseRequest, userEmail);
-            return ResponseEntity.ok(savedExercise);
-        }
+        Exercises savedExercise = exercisesService.addExercise(exerciseRequest, userEmail);
+        return ResponseEntity.ok(savedExercise);
     }
 
     // ✅ Delete a custom exercise (only if created by the user)
     @DeleteMapping("/{exerciseId}")
     public ResponseEntity<Void> deleteExercise(
             @PathVariable Long exerciseId,
-            @RequestParam String userEmail) {
+            @RequestHeader("Authorization") String token) {
+
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
+
         exercisesService.deleteExercise(exerciseId, userEmail);
         return ResponseEntity.noContent().build();
     }
