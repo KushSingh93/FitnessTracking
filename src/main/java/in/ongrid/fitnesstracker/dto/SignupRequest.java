@@ -1,9 +1,9 @@
 package in.ongrid.fitnesstracker.dto;
 
 import in.ongrid.fitnesstracker.model.enums.Gender;
+import in.ongrid.fitnesstracker.model.enums.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,4 +28,5 @@ public class SignupRequest {
 
     private Gender gender;
 
+    private UserType userType = UserType.USER; // ✅ Default to USER if not provided
 }

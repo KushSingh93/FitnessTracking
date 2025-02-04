@@ -18,31 +18,15 @@ public class StreaksController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Get the current streak of a user
+    // ✅ Get & Auto-Update User Streak
     @GetMapping("/getStreak")
     public ResponseEntity<StreaksRequest> getUserStreak(@RequestHeader("Authorization") String token) {
-        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userEmail = jwtUtil.extractEmail(jwtToken);
-
-        return ResponseEntity.ok(streaksService.getUserStreak(userEmail));
+        String userEmail = extractUserEmail(token);
+        return ResponseEntity.ok(streaksService.getAndUpdateUserStreak(userEmail));
     }
 
-    // ✅ Update the streak when a workout is completed
-    @PostMapping("/update")
-    public ResponseEntity<StreaksRequest> updateStreak(@RequestHeader("Authorization") String token) {
-        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userEmail = jwtUtil.extractEmail(jwtToken);
-
-        return ResponseEntity.ok(streaksService.updateUserStreak(userEmail));
-    }
-
-    // ✅ Reset the streak when a user misses a workout
-    @PostMapping("/reset")
-    public ResponseEntity<Void> resetStreak(@RequestHeader("Authorization") String token) {
-        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userEmail = jwtUtil.extractEmail(jwtToken);
-
-        streaksService.resetUserStreak(userEmail);
-        return ResponseEntity.noContent().build();
+    // ✅ Utility Method to Extract User Email from JWT Token
+    private String extractUserEmail(String token) {
+        return jwtUtil.extractEmail(token.startsWith("Bearer ") ? token.substring(7) : token);
     }
 }

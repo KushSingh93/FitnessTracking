@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface UsersDao {
     List<User> getAllUsers();
+    List<User> getAllAdmins(); // ✅ Fetch only admin users
     Optional<User> getUserById(Long userId);
     Optional<User> getUserByEmail(String email);
     User saveUser(User user);

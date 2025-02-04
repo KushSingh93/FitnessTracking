@@ -5,7 +5,6 @@ import in.ongrid.fitnesstracker.model.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -49,5 +48,10 @@ public class User {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+
+        // ✅ Default userType to USER if it's null
+        if (this.userType == null) {
+            this.userType = UserType.USER;
+        }
     }
 }

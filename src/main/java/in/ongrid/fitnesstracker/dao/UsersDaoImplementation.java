@@ -23,6 +23,14 @@ public class UsersDaoImplementation implements UsersDao {
 
     @Override
     @Transactional
+    public List<User> getAllAdmins() {
+        return entityManager.createQuery(
+                        "SELECT u FROM User u WHERE u.userType = 'ADMIN'", User.class)
+                .getResultList();
+    }
+
+    @Override
+    @Transactional
     public Optional<User> getUserById(Long userId) {
         return Optional.ofNullable(entityManager.find(User.class, userId));
     }

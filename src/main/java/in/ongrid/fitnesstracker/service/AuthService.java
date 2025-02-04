@@ -36,18 +36,22 @@ public class AuthService {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        if(request.getGender() == null) {
-            user.setGender(Gender.MALE);
-        }
-        else{
-            user.setGender(request.getGender());
-        }
-        String hashedPassword = BCrypt.hashpw(request.getPassword() , BCrypt.gensalt());
+
+        // ✅ Use provided gender, default to MALE if null
+        user.setGender(request.getGender() != null ? request.getGender() : Gender.MALE);
+
+        // ✅ Hash password
+        String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
-        user.setUserType(UserType.USER);// Save to DB
-        String email = request.getEmail();
+
+        // ✅ Only set USER if userType is null
+        user.setUserType(request.getUserType() != null ? request.getUserType() : UserType.USER);
+
+        // Save to DB
         usersDao.saveUser(user);
-        return jwtUtil.generateToken(email);
+
+        // Generate and return JWT
+        return jwtUtil.generateToken(user.getEmail());
     }
 
     public String login(LoginRequest request) {

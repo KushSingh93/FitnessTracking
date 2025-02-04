@@ -18,8 +18,12 @@ public class ExercisesDaoImplementation implements ExercisesDao {
     private EntityManager entityManager;
 
     @Override
-    public List<Exercises> getAllExercises() {
-        return entityManager.createQuery("SELECT e FROM Exercises e", Exercises.class).getResultList();
+    public List<Exercises> getAllExercisesForUser(Long userId, List<Long> adminIds) {
+        return entityManager.createQuery(
+                        "SELECT e FROM Exercises e WHERE e.user.userId = :userId OR e.user.userId IN :adminIds", Exercises.class)
+                .setParameter("userId", userId)
+                .setParameter("adminIds", adminIds)
+                .getResultList();
     }
 
     @Override
@@ -27,12 +31,13 @@ public class ExercisesDaoImplementation implements ExercisesDao {
         return Optional.ofNullable(entityManager.find(Exercises.class, exerciseId));
     }
 
-    // ✅ Updated method to use BodyPart Enum
-
-    public List<Exercises> getExercisesByBodyPart(BodyPart bodyPart) {
+    @Override
+    public List<Exercises> getExercisesByBodyPart(BodyPart bodyPart, Long userId, List<Long> adminIds) {
         return entityManager.createQuery(
-                        "SELECT e FROM Exercises e WHERE e.bodyPart = :bodyPart", Exercises.class)
-                .setParameter("bodyPart", bodyPart)  // Correctly passing enum as a parameter
+                        "SELECT e FROM Exercises e WHERE (e.user.userId = :userId OR e.user.userId IN :adminIds) AND e.bodyPart = :bodyPart", Exercises.class)
+                .setParameter("userId", userId)
+                .setParameter("adminIds", adminIds)
+                .setParameter("bodyPart", bodyPart)
                 .getResultList();
     }
 

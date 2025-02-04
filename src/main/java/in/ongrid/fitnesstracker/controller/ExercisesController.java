@@ -24,8 +24,11 @@ public class ExercisesController {
 
     // ✅ Get all exercises (Predefined & Custom)
     @GetMapping("/getAllExercises")
-    public ResponseEntity<List<Exercises>> getAllExercises() {
-        return ResponseEntity.ok(exercisesService.getAllExercises());
+    public ResponseEntity<List<Exercises>> getAllExercises(@RequestHeader("Authorization") String token) {
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
+
+        return ResponseEntity.ok(exercisesService.getAllExercisesForUser(userEmail));
     }
 
     // ✅ Get exercise by ID
@@ -34,10 +37,16 @@ public class ExercisesController {
         return ResponseEntity.ok(exercisesService.getExerciseById(exerciseId));
     }
 
-    // ✅ Get exercises by body part
+    // ✅ Get exercises by body part (Now filtered by user + admin)
     @GetMapping("/bodyPart/{bodyPart}")
-    public ResponseEntity<List<Exercises>> getExercisesByBodyPart(@PathVariable String bodyPart) {
-        return ResponseEntity.ok(exercisesService.getExercisesByBodyPart(bodyPart));
+    public ResponseEntity<List<Exercises>> getExercisesByBodyPart(
+            @PathVariable String bodyPart,
+            @RequestHeader("Authorization") String token) {
+
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
+
+        return ResponseEntity.ok(exercisesService.getExercisesByBodyPart(bodyPart, userEmail));
     }
 
     // ✅ Add a custom exercise

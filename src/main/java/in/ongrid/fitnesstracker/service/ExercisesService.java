@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExercisesService {
@@ -22,9 +23,16 @@ public class ExercisesService {
         this.usersDao = usersDao;
     }
 
-    // ✅ Get all exercises
-    public List<Exercises> getAllExercises() {
-        return exercisesDao.getAllExercises();
+    // ✅ Get all exercises for a user (includes their custom + admin exercises)
+    public List<Exercises> getAllExercisesForUser(String userEmail) {
+        User user = usersDao.getUserByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        List<Long> adminIds = usersDao.getAllAdmins().stream()
+                .map(User::getUserId)
+                .collect(Collectors.toList());
+
+        return exercisesDao.getAllExercisesForUser(user.getUserId(), adminIds);
     }
 
     // ✅ Get exercise by ID
@@ -34,49 +42,50 @@ public class ExercisesService {
     }
 
     // ✅ Get exercises by body part using enum
-    public List<Exercises> getExercisesByBodyPart(String bodyPart) {
+    public List<Exercises> getExercisesByBodyPart(String bodyPart, String userEmail) {
+        User user = usersDao.getUserByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        List<Long> adminIds = usersDao.getAllAdmins().stream()
+                .map(User::getUserId)
+                .collect(Collectors.toList());
+
         try {
-            BodyPart bodyPartEnum = BodyPart.valueOf(bodyPart.toUpperCase()); // Convert to enum
-            return exercisesDao.getExercisesByBodyPart(bodyPartEnum);
+            BodyPart bodyPartEnum = BodyPart.valueOf(bodyPart.toUpperCase());
+            return exercisesDao.getExercisesByBodyPart(bodyPartEnum, user.getUserId(), adminIds);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid body part: " + bodyPart);
         }
     }
 
-    // ✅ Save a new exercise
+    // ✅ Save a new custom exercise
     @Transactional
     public Exercises addExercise(ExerciseRequest exerciseRequest, String userEmail) {
-        // Fetch user by email
         User user = usersDao.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
-        // Convert DTO to Entity
         Exercises exercise = new Exercises();
         exercise.setUser(user);
         exercise.setExerciseName(exerciseRequest.getExerciseName());
+
         if (exerciseRequest.getCaloriesBurntPerSet() == null) {
             throw new RuntimeException("Calories burnt per set cannot be null.");
         }
-
         exercise.setCaloriesBurntPerSet(exerciseRequest.getCaloriesBurntPerSet());
 
-        // Validate and Convert BodyPart from Request
         if (exerciseRequest.getBodyPart() == null) {
             throw new RuntimeException("Body part cannot be null.");
         }
 
         try {
-            // Directly assign the enum value
             exercise.setBodyPart(exerciseRequest.getBodyPart());
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid body part: " + exerciseRequest.getBodyPart() +
                     ". Allowed values: CHEST, BACK, ARMS, LEGS, SHOULDER, ABS");
         }
 
-        // Save and return the created exercise
         return exercisesDao.saveExercise(exercise);
     }
-
 
     // ✅ Delete an exercise (Only if created by the user)
     public void deleteExercise(Long exerciseId, String userEmail) {

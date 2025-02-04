@@ -46,6 +46,12 @@ public class UsersController {
         return ResponseEntity.ok(usersService.getAllUsers());
     }
 
+    // ✅ Get all admin users
+    @GetMapping("/allAdmins")
+    public ResponseEntity<List<User>> getAllAdmins() {
+        return ResponseEntity.ok(usersService.getAllAdmins());
+    }
+
     // ✅ Get user by ID
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {

@@ -18,6 +18,10 @@ public class UsersService {
         return usersDao.getAllUsers();
     }
 
+    public List<User> getAllAdmins() {
+        return usersDao.getAllAdmins();
+    }
+
     public Optional<User> getUserById(Long userId) {
         return usersDao.getUserById(userId);
     }
