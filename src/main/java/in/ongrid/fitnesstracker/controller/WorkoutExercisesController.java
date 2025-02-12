@@ -1,11 +1,14 @@
 package in.ongrid.fitnesstracker.controller;
 
 import in.ongrid.fitnesstracker.dto.WorkoutExercisesRequest;
+import in.ongrid.fitnesstracker.dto.WorkoutResponse;
+import in.ongrid.fitnesstracker.model.entities.Exercises;
 import in.ongrid.fitnesstracker.service.WorkoutExercisesService;
 import in.ongrid.fitnesstracker.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -55,5 +58,10 @@ public class WorkoutExercisesController {
 
         workoutExercisesService.removeExerciseFromWorkout(workoutExerciseId, userEmail);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{date}")
+    public ResponseEntity<WorkoutResponse> getTodaysWorkout(@PathVariable LocalDate date) {
+        return null;
     }
 }

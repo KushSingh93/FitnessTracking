@@ -32,5 +32,12 @@ public class WorkoutExercises {
 
     @Column(nullable = false)
     private Integer reps;
-}
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false; // Default is false (not deleted)
+
+    // Soft delete method
+    public void softDelete() {
+        this.isDeleted = true;
+    }
+}

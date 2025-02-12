@@ -50,7 +50,8 @@ public class WorkoutExercisesDaoImplementation implements WorkoutExercisesDao {
     public void deleteWorkoutExercise(Long workoutExerciseId) {
         WorkoutExercises workoutExercise = entityManager.find(WorkoutExercises.class, workoutExerciseId);
         if (workoutExercise != null) {
-            entityManager.remove(workoutExercise);
+            workoutExercise.setDeleted(true); // Mark as deleted
+            entityManager.merge(workoutExercise); // Save change
         }
     }
 }

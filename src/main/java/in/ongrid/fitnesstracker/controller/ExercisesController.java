@@ -1,6 +1,7 @@
 package in.ongrid.fitnesstracker.controller;
 
 import in.ongrid.fitnesstracker.dto.ExerciseRequest;
+import in.ongrid.fitnesstracker.dto.ExerciseResponseDTO;
 import in.ongrid.fitnesstracker.model.entities.Exercises;
 import in.ongrid.fitnesstracker.service.ExercisesService;
 import in.ongrid.fitnesstracker.utils.JwtUtil;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/exercises")
@@ -24,11 +26,14 @@ public class ExercisesController {
 
     // ✅ Get all exercises (Predefined & Custom)
     @GetMapping("/getAllExercises")
-    public ResponseEntity<List<Exercises>> getAllExercises(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<ExerciseResponseDTO>> getAllExercises(@RequestHeader("Authorization") String token) {
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
         String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
 
-        return ResponseEntity.ok(exercisesService.getAllExercisesForUser(userEmail));
+//        List<Exercises> exercises = exercisesService.getAllExercisesForUser(userEmail);
+        List<ExerciseResponseDTO> exercises = exercisesService.getAllExercisesForUserWithFavourite(userEmail);
+
+        return ResponseEntity.ok(exercises);
     }
 
     // ✅ Get exercise by ID
@@ -74,5 +79,16 @@ public class ExercisesController {
 
         exercisesService.deleteExercise(exerciseId, userEmail);
         return ResponseEntity.noContent().build();
+    }
+
+    private ExerciseResponseDTO convertToDto(Exercises exercise) {
+        ExerciseResponseDTO dto = new ExerciseResponseDTO();
+        dto.setExerciseId(exercise.getExerciseId());
+        dto.setExerciseName(exercise.getExerciseName());
+        dto.setBodyPart(exercise.getBodyPart());
+        dto.setCaloriesBurntPerSet(exercise.getCaloriesBurntPerSet());
+        dto.setUserId(exercise.getUser().getUserId());  // Only include the user ID
+
+        return dto;
     }
 }

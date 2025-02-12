@@ -36,8 +36,10 @@ public class Exercises {
     @JoinColumn(name = "userId", nullable = false)  // Match the column name
     private User user;
 
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkoutExercises> workoutExercises;
+    private boolean deleted = false;
+
+//    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<WorkoutExercises> workoutExercises;
 
 }
 

@@ -2,8 +2,10 @@ package in.ongrid.fitnesstracker.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Builder
 @Entity
 @Table(name = "favorite_exercises")
 @Getter
@@ -27,6 +29,9 @@ public class FavoriteExercises {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime addedAt;
+
+    @Builder.Default
+    private Boolean deleted = false;
 
     @PrePersist
     protected void onCreate() {

@@ -4,6 +4,8 @@ import in.ongrid.fitnesstracker.interceptor.JwtInterceptor;
 import in.ongrid.fitnesstracker.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -18,6 +20,9 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (request.getMethod().equalsIgnoreCase(HttpMethod.OPTIONS.name())) {
+            return true;
+        }
         // Get the token from the Authorization header
         String authHeader = request.getHeader("Authorization");
 

@@ -30,6 +30,10 @@ public class FavoriteExercisesService {
         return favoriteExercisesDao.getFavoritesByUserId(userId);
     }
 
+    public FavoriteExercises getFavoriteByUserIdAndExcercise(Long userId, Long exerciseId) {
+        return favoriteExercisesDao.getFavoritesByUserIdAndExcerciseId(userId, exerciseId);
+    }
+
     // ✅ Add an exercise to favorites
     public FavoriteExercises addFavoriteExercise(FavoriteRequest favoriteRequest, String userEmail) {
         // Fetch user by email
@@ -39,32 +43,36 @@ public class FavoriteExercisesService {
         // Fetch exercise by ID
         Exercises exercise = exercisesDao.getExerciseById(favoriteRequest.getExerciseId())
                 .orElseThrow(() -> new RuntimeException("Exercise not found!"));
+        FavoriteExercises existingFavoriteExercise = favoriteExercisesDao.getFavoritesByUserIdAndExcerciseId(user.getUserId(), exercise.getExerciseId());
+        if (existingFavoriteExercise != null) {
+            existingFavoriteExercise.setDeleted(false);
+            return favoriteExercisesDao.saveFavoriteExercise(existingFavoriteExercise);
+        } else {
+            // Create and save favorite exercise entry
+            FavoriteExercises favoriteExercise = new FavoriteExercises();
+            favoriteExercise.setUser(user);
+            favoriteExercise.setExercise(exercise);
+            return favoriteExercisesDao.saveFavoriteExercise(favoriteExercise);
 
-        // Create and save favorite exercise entry
-        FavoriteExercises favoriteExercise = new FavoriteExercises();
-        favoriteExercise.setUser(user);
-        favoriteExercise.setExercise(exercise);
-
-        return favoriteExercisesDao.saveFavoriteExercise(favoriteExercise);
+        }
     }
 
-    // ✅ Remove an exercise from favorites
-    public void deleteFavoriteExercise(Long exerciseId, String userEmail) {
+    // Remove an exercise from favorites (soft delete)
+    public void deleteFavoriteExercise(Long favExerciseId, String userEmail) {
         // Fetch the user by email
         User user = usersDao.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
-
-        // Check if the exercise exists
-        Exercises exercise = exercisesDao.getExerciseById(exerciseId)
-                .orElseThrow(() -> new RuntimeException("Exercise not found!"));
-
-        // Check if the exercise is actually in the user's favorites
-        Optional<FavoriteExercises> favoriteExercise = favoriteExercisesDao.findByUserAndExercise(user, exercise);
-        if (favoriteExercise.isEmpty()) {
-            throw new RuntimeException("Exercise is not in your favorites!");
-        }
-
-        // Delete the favorite
-        favoriteExercisesDao.deleteFavoriteExercise(favoriteExercise.get().getFavoriteId());
+//        boolean isValid = favoriteExercisesDao.isUserValid(user, favExerciseId);
+        // Soft delete by setting the 'deleted' flag to true
+//        if (isValid) {
+            favoriteExercisesDao.setDeletedById(favExerciseId, user.getUserId());
+//        }
+//        else{
+//            throw new RuntimeException("User is not Authorized");
+//        }
     }
+
+
+
+
 }

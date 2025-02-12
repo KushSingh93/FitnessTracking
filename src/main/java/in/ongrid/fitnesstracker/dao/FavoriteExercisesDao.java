@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface FavoriteExercisesDao {
     List<FavoriteExercises> getFavoritesByUserId(Long userId);
+    FavoriteExercises getFavoritesByUserIdAndExcerciseId(Long userId, Long exerciseId);
     FavoriteExercises saveFavoriteExercise(FavoriteExercises favoriteExercise);
-    void deleteFavoriteExercise(Long favoriteId);
+//    void deleteFavoriteExercise(Long favoriteId);
+    void setDeletedById(Long id, Long userId);
     Optional<FavoriteExercises> findByUserAndExercise(User user, Exercises exercise);
 }
