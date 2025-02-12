@@ -35,6 +35,7 @@ public class WorkoutExercisesController {
         return ResponseEntity.ok(workoutExercisesService.addExerciseToWorkout(request, userEmail));
     }
 
+
     // ✅ Get all exercises in a workout (🔒 Requires Authentication, Only Owner Can View)
     @GetMapping("/{workoutId}")
     public ResponseEntity<List<WorkoutExercisesRequest>> getWorkoutExercises(
@@ -59,9 +60,15 @@ public class WorkoutExercisesController {
         workoutExercisesService.removeExerciseFromWorkout(workoutExerciseId, userEmail);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("byDate/{date}")
+    public ResponseEntity<List<WorkoutExercisesRequest>> getExercisesByDate(
+            @PathVariable LocalDate date,
+            @RequestHeader("Authorization") String token) {
 
-    @GetMapping("/{date}")
-    public ResponseEntity<WorkoutResponse> getTodaysWorkout(@PathVariable LocalDate date) {
-        return null;
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String userEmail = jwtUtil.extractEmail(jwtToken);
+
+        List<WorkoutExercisesRequest> exercises = workoutExercisesService.getExercisesByDate(date, userEmail);
+        return ResponseEntity.ok(exercises);
     }
 }

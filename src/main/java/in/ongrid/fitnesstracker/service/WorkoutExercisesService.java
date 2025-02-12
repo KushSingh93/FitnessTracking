@@ -11,7 +11,9 @@ import in.ongrid.fitnesstracker.model.entities.Exercises;
 import in.ongrid.fitnesstracker.model.entities.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,8 +38,17 @@ public class WorkoutExercisesService {
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
         // Fetch workout and verify ownership
-        Workouts workout = workoutsDao.getWorkoutById(request.getWorkoutId())
-                .orElseThrow(() -> new RuntimeException("Workout not found!"));
+//        Workouts workout = workoutsDao.getWorkoutById(workoutId)
+//                .orElseThrow(() -> new RuntimeException("Workout not found!"));
+
+        Workouts workout = workoutExercisesDao.getWorkoutByUserAndDate(user.getUserId(), LocalDate.now());
+
+        if(workout == null) {
+            workout = new Workouts();
+            workout.setUser(user);
+            workout.setDate(LocalDate.now());
+            workout = workoutsDao.saveWorkout(workout);
+        }
 
         if (!workout.getUser().getUserId().equals(user.getUserId())) {
             throw new RuntimeException("You can only add exercises to your own workouts!");
@@ -65,6 +76,7 @@ public class WorkoutExercisesService {
                 savedWorkoutExercise.getReps()
         );
     }
+
 
     // ✅ Get all exercises in a workout (With user validation)
     public List<WorkoutExercisesRequest> getWorkoutExercises(Long workoutId, String userEmail) {
@@ -94,12 +106,35 @@ public class WorkoutExercisesService {
                 .collect(Collectors.toList());
     }
 
+    // ✅ Get all exercises in a workout by date (With user validation)
+    public List<WorkoutExercisesRequest> getExercisesByDate(LocalDate date, String userEmail) {
+        // Get user from email
+        User user = usersDao.getUserByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        // Fetch all exercises linked to the workout on this date
+        return workoutExercisesDao.getExercisesByUserAndDate(user.getUserId(), date)
+                .stream()
+                .map(we -> new WorkoutExercisesRequest(
+                        we.getWorkoutExerciseId(),
+                        we.getWorkout().getWorkoutId(),
+                        we.getExercise().getExerciseId(),
+                        we.getExercise().getExerciseName(),
+                        we.getSets(),
+                        we.getReps()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
+
     // ✅ Remove an exercise from a workout (With user validation)
     public void removeExerciseFromWorkout(Long workoutExerciseId, String userEmail) {
-        WorkoutExercises workoutExercise = workoutExercisesDao.getWorkoutExerciseById(workoutExerciseId)
-                .orElseThrow(() -> new RuntimeException("Workout exercise not found!"));
+        Optional<WorkoutExercises>  workoutExercises = Optional.ofNullable(workoutExercisesDao.getWorkoutExerciseById(workoutExerciseId)
+                .orElseThrow(() -> new RuntimeException("Workout exercise not found!")));
 
         // Verify ownership
+        WorkoutExercises workoutExercise = workoutExercises.get();
         if (!workoutExercise.getWorkout().getUser().getEmail().equals(userEmail)) {
             throw new RuntimeException("You can only remove exercises from your own workouts!");
         }

@@ -1,6 +1,5 @@
 package in.ongrid.fitnesstracker.model.entities;
-import in.ongrid.fitnesstracker.model.entities.Exercises;
-import in.ongrid.fitnesstracker.model.entities.Workouts;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,11 +32,11 @@ public class WorkoutExercises {
     @Column(nullable = false)
     private Integer reps;
 
-    @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false; // Default is false (not deleted)
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false; // ✅ Renamed from "isDeleted" to "deleted"
 
-    // Soft delete method
+    // ✅ Soft delete method
     public void softDelete() {
-        this.isDeleted = true;
+        this.deleted = true;
     }
 }
