@@ -57,7 +57,7 @@ public class ExercisesService {
             getAllExercises.setExerciseId(exercise.getExerciseId());
             getAllExercises.setExerciseName(exercise.getExerciseName());
             getAllExercises.setBodyPart(exercise.getBodyPart());
-            getAllExercises.setCaloriesBurntPerSet(exercise.getCaloriesBurntPerSet());
+            getAllExercises.setCaloriesBurntPerRep(exercise.getCaloriesBurntPerRep());
             FavoriteExercises favoriteExercises = favoriteExercisesDao.getFavoritesByUserIdAndExcerciseId(user.getUserId(), exercise.getExerciseId());
             if (favoriteExercises != null) {
                 getAllExercises.setFavourite(Boolean.FALSE.equals(favoriteExercises.getDeleted()));
@@ -102,10 +102,10 @@ public class ExercisesService {
         exercise.setUser(user);
         exercise.setExerciseName(exerciseRequest.getExerciseName());
 
-        if (exerciseRequest.getCaloriesBurntPerSet() == null) {
+        if (exerciseRequest.getCaloriesBurntPerRep() == null) {
             throw new RuntimeException("Calories burnt per set cannot be null.");
         }
-        exercise.setCaloriesBurntPerSet(exerciseRequest.getCaloriesBurntPerSet());
+        exercise.setCaloriesBurntPerRep(exerciseRequest.getCaloriesBurntPerRep());
 
         if (exerciseRequest.getBodyPart() == null) {
             throw new RuntimeException("Body part cannot be null.");

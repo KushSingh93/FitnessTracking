@@ -48,7 +48,7 @@ public class WorkoutExercisesController {
         return ResponseEntity.ok(workoutExercisesService.getWorkoutExercises(workoutId, userEmail));
     }
 
-    // ✅ Remove an exercise from a workout (🔒 Requires Authentication)
+    //  Remove an exercise from a workout
     @DeleteMapping("/remove/{workoutExerciseId}")
     public ResponseEntity<Void> removeExerciseFromWorkout(
             @PathVariable Long workoutExerciseId,

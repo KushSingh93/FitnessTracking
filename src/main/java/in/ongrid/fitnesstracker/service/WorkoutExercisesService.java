@@ -73,7 +73,8 @@ public class WorkoutExercisesService {
                 exercise.getExerciseId(),
                 exercise.getExerciseName(),
                 savedWorkoutExercise.getSets(),
-                savedWorkoutExercise.getReps()
+                savedWorkoutExercise.getReps(),
+                exercise.getCaloriesBurntPerRep()
         );
     }
 
@@ -101,7 +102,8 @@ public class WorkoutExercisesService {
                         we.getExercise().getExerciseId(),
                         we.getExercise().getExerciseName(),
                         we.getSets(),
-                        we.getReps()
+                        we.getReps(),
+                        we.getExercise().getCaloriesBurntPerRep()
                 ))
                 .collect(Collectors.toList());
     }
@@ -121,7 +123,8 @@ public class WorkoutExercisesService {
                         we.getExercise().getExerciseId(),
                         we.getExercise().getExerciseName(),
                         we.getSets(),
-                        we.getReps()
+                        we.getReps(),
+                        we.getExercise().getCaloriesBurntPerRep()
                 ))
                 .collect(Collectors.toList());
     }

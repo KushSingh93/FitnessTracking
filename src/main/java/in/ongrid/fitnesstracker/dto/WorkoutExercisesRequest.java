@@ -8,31 +8,32 @@ import lombok.Setter;
 @Setter
 public class WorkoutExercisesRequest {
 
-    private Long workoutExerciseId; // Auto-generated ID (for responses)
+    private Long workoutExerciseId;
 
     @NotNull
-    private Long workoutId; // ID of the workout (for request & response)
+    private Long workoutId;
 
     @NotNull
-    private Long exerciseId; // ID of the exercise (for request & response)
+    private Long exerciseId;
 
-    private String exerciseName; // Optional, returned in responses
-
-    @NotNull
-    private Integer sets; // Number of sets (for request & response)
+    private String exerciseName;
 
     @NotNull
-    private Integer reps; // Number of reps (for request & response)
+    private Integer sets;
 
-    public WorkoutExercisesRequest() {
-    }
+    @NotNull
+    private Integer reps;
 
-    public WorkoutExercisesRequest(Long workoutExerciseId, Long workoutId, Long exerciseId, String exerciseName, Integer sets, Integer reps) {
+    @NotNull
+    private Double caloriesBurntPerRep;
+
+    public WorkoutExercisesRequest(Long workoutExerciseId, Long workoutId, Long exerciseId, String exerciseName, Integer sets, Integer reps, Double caloriesBurntPerRep) {
         this.workoutExerciseId = workoutExerciseId;
         this.workoutId = workoutId;
         this.exerciseId = exerciseId;
         this.exerciseName = exerciseName;
         this.sets = sets;
         this.reps = reps;
+        this.caloriesBurntPerRep = caloriesBurntPerRep;
     }
 }

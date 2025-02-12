@@ -1,7 +1,6 @@
 package in.ongrid.fitnesstracker.dto;
 
 import in.ongrid.fitnesstracker.model.enums.BodyPart;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -18,6 +17,6 @@ public class ExerciseRequest {
     private BodyPart bodyPart;
 
     @NotNull  // ✅ Ensure this is required
-    private Float caloriesBurntPerSet;
+    private Double caloriesBurntPerRep;
 
 }

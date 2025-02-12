@@ -86,7 +86,7 @@ public class ExercisesController {
         dto.setExerciseId(exercise.getExerciseId());
         dto.setExerciseName(exercise.getExerciseName());
         dto.setBodyPart(exercise.getBodyPart());
-        dto.setCaloriesBurntPerSet(exercise.getCaloriesBurntPerSet());
+        dto.setCaloriesBurntPerRep(exercise.getCaloriesBurntPerRep());
         dto.setUserId(exercise.getUser().getUserId());  // Only include the user ID
 
         return dto;

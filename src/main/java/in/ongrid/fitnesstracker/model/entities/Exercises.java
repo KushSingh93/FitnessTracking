@@ -30,7 +30,7 @@ public class Exercises {
     private BodyPart bodyPart;
 
     @Column(nullable = false)
-    private Float caloriesBurntPerSet;  // ✅ Added based on schema
+    private Double caloriesBurntPerRep;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)  // Match the column name

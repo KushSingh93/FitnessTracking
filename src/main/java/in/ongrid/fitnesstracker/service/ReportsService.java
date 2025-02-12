@@ -62,7 +62,7 @@ public class ReportsService {
 
         // ✅ Compute Total Calories Burned
         double totalCaloriesBurned = workoutExercises.stream()
-                .mapToDouble(we -> we.getExercise().getCaloriesBurntPerSet() * we.getSets())
+                .mapToDouble(we -> we.getExercise().getCaloriesBurntPerRep() * we.getSets())
                 .sum();
 
         // ✅ Compute Body Part Trained Frequency
