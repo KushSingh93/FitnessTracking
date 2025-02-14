@@ -31,7 +31,7 @@ public class WorkoutExercisesService {
         this.usersDao = usersDao;
     }
 
-    // ✅ Add an exercise to a workout (With user validation)
+    // Add an exercise to a workout (With user validation)
     public WorkoutExercisesRequest addExerciseToWorkout(WorkoutExercisesRequest request, String userEmail) {
         // Get user from email
         User user = usersDao.getUserByEmail(userEmail)
@@ -79,7 +79,7 @@ public class WorkoutExercisesService {
     }
 
 
-    // ✅ Get all exercises in a workout (With user validation)
+    // Get all exercises in a workout (With user validation)
     public List<WorkoutExercisesRequest> getWorkoutExercises(Long workoutId, String userEmail) {
         // Fetch the workout and validate ownership
         Workouts workout = workoutsDao.getWorkoutById(workoutId)
@@ -108,7 +108,7 @@ public class WorkoutExercisesService {
                 .collect(Collectors.toList());
     }
 
-    // ✅ Get all exercises in a workout by date (With user validation)
+    //  Get all exercises in a workout by date (With user validation)
     public List<WorkoutExercisesRequest> getExercisesByDate(LocalDate date, String userEmail) {
         // Get user from email
         User user = usersDao.getUserByEmail(userEmail)
@@ -131,7 +131,7 @@ public class WorkoutExercisesService {
 
 
 
-    // ✅ Remove an exercise from a workout (With user validation)
+    //  Remove an exercise from a workout (With user validation)
     public void removeExerciseFromWorkout(Long workoutExerciseId, String userEmail) {
         Optional<WorkoutExercises>  workoutExercises = Optional.ofNullable(workoutExercisesDao.getWorkoutExerciseById(workoutExerciseId)
                 .orElseThrow(() -> new RuntimeException("Workout exercise not found!")));

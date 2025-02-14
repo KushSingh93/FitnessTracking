@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ReportsDao {
     List<WorkoutExercises> getWorkoutSummary(Long userId, LocalDate startDate, LocalDate endDate);
+
+    void clearPersistenceContext();
 }

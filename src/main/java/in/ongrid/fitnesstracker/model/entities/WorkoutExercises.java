@@ -33,9 +33,9 @@ public class WorkoutExercises {
     private Integer reps;
 
     @Column(name = "deleted", nullable = false)
-    private boolean deleted = false; // ✅ Renamed from "isDeleted" to "deleted"
+    private boolean deleted = false;
 
-    // ✅ Soft delete method
+    //  Soft delete method
     public void softDelete() {
         this.deleted = true;
     }

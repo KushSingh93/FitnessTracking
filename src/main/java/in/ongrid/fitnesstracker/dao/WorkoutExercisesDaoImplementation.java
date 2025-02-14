@@ -19,7 +19,7 @@ public class WorkoutExercisesDaoImplementation implements WorkoutExercisesDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // ✅ Retrieve all workout exercises (Excluding soft deleted)
+    //  Retrieve all workout exercises (Excluding soft deleted)
     @Override
     public List<WorkoutExercises> getAllWorkoutExercises() {
         return entityManager.createQuery(
@@ -27,7 +27,7 @@ public class WorkoutExercisesDaoImplementation implements WorkoutExercisesDao {
                 .getResultList();
     }
 
-    // ✅ Retrieve a specific workout exercise by ID (Excluding soft deleted)
+    //  Retrieve a specific workout exercise by ID (Excluding soft deleted)
     @Override
     public Optional<WorkoutExercises> getWorkoutExerciseById(Long workoutExerciseId) {
         return entityManager.createQuery(
@@ -39,7 +39,7 @@ public class WorkoutExercisesDaoImplementation implements WorkoutExercisesDao {
                 .findFirst();
     }
 
-    // ✅ Retrieve all exercises for a user by date (Excluding soft deleted)
+    //  Retrieve all exercises for a user by date (Excluding soft deleted)
     @Override
     public List<WorkoutExercises> getExercisesByUserAndDate(Long userId, LocalDate date) {
         return entityManager.createQuery(
@@ -68,7 +68,7 @@ public class WorkoutExercisesDaoImplementation implements WorkoutExercisesDao {
         }
     }
 
-    // ✅ Retrieve all exercises in a given workout (Excluding soft deleted)
+    //  Retrieve all exercises in a given workout (Excluding soft deleted)
     @Override
     public List<WorkoutExercises> getWorkoutExercisesByWorkout(Long workoutId) {
         return entityManager.createQuery(
@@ -78,14 +78,14 @@ public class WorkoutExercisesDaoImplementation implements WorkoutExercisesDao {
                 .getResultList();
     }
 
-    // ✅ Save a new workout exercise (Add exercise to workout)
+    //  Save a new workout exercise (Add exercise to workout)
     @Override
     public WorkoutExercises saveWorkoutExercise(WorkoutExercises workoutExercise) {
         entityManager.persist(workoutExercise);
         return workoutExercise;
     }
 
-    // ✅ Soft delete a workout exercise by ID
+    //  Soft delete a workout exercise by ID
     @Override
     public void deleteWorkoutExercise(Long workoutExerciseId) {
         WorkoutExercises workoutExercise = entityManager.find(WorkoutExercises.class, workoutExerciseId);

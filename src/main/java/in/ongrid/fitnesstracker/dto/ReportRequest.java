@@ -13,4 +13,5 @@ public class ReportRequest {
     private double totalCaloriesBurned;    // Total calories burnt
     private String mostTrainedBodyPart;    // Most frequently trained body part
     private Map<String, Long> bodyPartFrequency; // Frequency of each body part trained
+    private Map<String, Double> dailyCalories;
 }

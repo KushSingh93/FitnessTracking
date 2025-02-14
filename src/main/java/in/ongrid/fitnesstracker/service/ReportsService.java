@@ -44,46 +44,45 @@ public class ReportsService {
                 throw new IllegalArgumentException("Invalid period. Allowed: weekly, monthly, yearly.");
         }
 
-        // ✅ Fetch workouts within the time range
+        //  Fetch workouts within the time range (Ensure fresh data)
+        reportsDao.clearPersistenceContext();
         List<WorkoutExercises> workoutExercises = reportsDao.getWorkoutSummary(user.getUserId(), startDate, endDate);
 
-        // 🔹 LOGGING: Ensure data is being fetched
-        System.out.println("Fetched Workouts: " + workoutExercises.size());
-
         if (workoutExercises.isEmpty()) {
-            return new ReportRequest(period, 0, 0, "No Data", Map.of());
+            return new ReportRequest(period, 0, 0, "No Data", Map.of(), Map.of());
         }
 
-        // ✅ Compute Total Workouts
+        //  Compute Total Workouts
         int totalWorkouts = (int) workoutExercises.stream()
-                .map(we -> we.getWorkout().getWorkoutId()) // Get unique workout IDs
+                .map(we -> we.getWorkout().getWorkoutId())
                 .distinct()
                 .count();
 
-        // ✅ Compute Total Calories Burned
+        //  Compute Corrected Total Calories Burned
         double totalCaloriesBurned = workoutExercises.stream()
-                .mapToDouble(we -> we.getExercise().getCaloriesBurntPerRep() * we.getSets())
+                .mapToDouble(we -> we.getExercise().getCaloriesBurntPerRep() * we.getSets() * we.getReps())
                 .sum();
 
-        // ✅ Compute Body Part Trained Frequency
-        Map<String, Long> bodyPartFrequency = workoutExercises.stream()
+        //  Compute Daily Calories Burned Correctly
+        Map<String, Double> dailyCalories = workoutExercises.stream()
                 .collect(Collectors.groupingBy(
-                        we -> we.getExercise().getBodyPart().toString(), // Ensure proper conversion
-                        Collectors.counting()
+                        we -> we.getWorkout().getDate().toString(),
+                        Collectors.summingDouble(we -> we.getExercise().getCaloriesBurntPerRep() * we.getSets() * we.getReps())
                 ));
 
-        // ✅ Compute Most Trained Body Part
+        //  Compute Correct Body Part Frequency
+        Map<String, Long> bodyPartFrequency = workoutExercises.stream()
+                .collect(Collectors.groupingBy(
+                        we -> we.getExercise().getBodyPart().toString(),
+                        Collectors.summingLong(we -> (long) we.getSets())
+                ));
+
+        //  Compute Most Trained Body Part
         String mostTrainedBodyPart = bodyPartFrequency.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse("No Data");
 
-        // 🔹 LOGGING: Ensure calculated values
-        System.out.println("Total Workouts: " + totalWorkouts);
-        System.out.println("Total Calories Burned: " + totalCaloriesBurned);
-        System.out.println("Most Trained Body Part: " + mostTrainedBodyPart);
-        System.out.println("Body Part Frequency: " + bodyPartFrequency);
-
-        return new ReportRequest(period, totalWorkouts, totalCaloriesBurned, mostTrainedBodyPart, bodyPartFrequency);
+        return new ReportRequest(period, totalWorkouts, totalCaloriesBurned, mostTrainedBodyPart, bodyPartFrequency, dailyCalories);
     }
 }

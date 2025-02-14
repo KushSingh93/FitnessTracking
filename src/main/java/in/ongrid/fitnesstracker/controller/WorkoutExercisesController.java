@@ -23,7 +23,7 @@ public class WorkoutExercisesController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Add an exercise to a workout (🔒 Requires Authentication)
+    //  Add an exercise to a workout
     @PostMapping("/add")
     public ResponseEntity<WorkoutExercisesRequest> addExerciseToWorkout(
             @RequestBody WorkoutExercisesRequest request,
@@ -36,7 +36,7 @@ public class WorkoutExercisesController {
     }
 
 
-    // ✅ Get all exercises in a workout (🔒 Requires Authentication, Only Owner Can View)
+    //  Get all exercises in a workout
     @GetMapping("/{workoutId}")
     public ResponseEntity<List<WorkoutExercisesRequest>> getWorkoutExercises(
             @PathVariable Long workoutId,

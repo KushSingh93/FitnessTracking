@@ -18,7 +18,7 @@ public class ReportsController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Get overall workout summary report
+    // Get overall workout summary report
     @GetMapping("/summary")
     public ResponseEntity<ReportRequest> getWorkoutSummary(
             @RequestHeader("Authorization") String token,
