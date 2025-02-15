@@ -22,10 +22,18 @@ public class FavoriteExercisesController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Retrieve favorite exercises of a user
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<FavoriteExercises>> getFavoritesByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(favoriteExercisesService.getFavoritesByUserId(userId));
+    // ✅ Retrieve favorite exercises of a user using the token
+    @GetMapping
+    public ResponseEntity<List<FavoriteExercises>> getFavoritesByUser(
+            @RequestHeader("Authorization") String token) {
+
+        // Extract actual JWT token (remove "Bearer " prefix)
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
+
+        // Fetch favorite exercises using the user's email
+        List<FavoriteExercises> favorites = favoriteExercisesService.getFavoritesByUserEmail(userEmail);
+        return ResponseEntity.ok(favorites);
     }
 
     // ✅ Add an exercise to favorites

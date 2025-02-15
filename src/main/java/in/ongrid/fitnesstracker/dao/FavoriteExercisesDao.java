@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FavoriteExercisesDao {
-    List<FavoriteExercises> getFavoritesByUserId(Long userId);
+    List<FavoriteExercises> getFavoritesByUserEmail(String userEmail);
     FavoriteExercises getFavoritesByUserIdAndExcerciseId(Long userId, Long exerciseId);
     FavoriteExercises saveFavoriteExercise(FavoriteExercises favoriteExercise);
 //    void deleteFavoriteExercise(Long favoriteId);

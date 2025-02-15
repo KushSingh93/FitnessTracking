@@ -18,15 +18,9 @@ public class StreaksController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Get & Auto-Update User Streak
     @GetMapping("/getStreak")
     public ResponseEntity<StreaksRequest> getUserStreak(@RequestHeader("Authorization") String token) {
-        String userEmail = extractUserEmail(token);
-        return ResponseEntity.ok(streaksService.getAndUpdateUserStreak(userEmail));
-    }
-
-    // ✅ Utility Method to Extract User Email from JWT Token
-    private String extractUserEmail(String token) {
-        return jwtUtil.extractEmail(token.startsWith("Bearer ") ? token.substring(7) : token);
+        String userEmail = jwtUtil.extractEmail(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(streaksService.getUserStreak(userEmail));
     }
 }

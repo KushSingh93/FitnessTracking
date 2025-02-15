@@ -20,12 +20,12 @@ public class FavoriteExercisesDaoImplementation implements FavoriteExercisesDao 
     @PersistenceContext
     private EntityManager entityManager;
 
-    // ✅ Retrieve all favorite exercises of a user
+    // ✅ Retrieve all favorite exercises of a user by email
     @Override
-    public List<FavoriteExercises> getFavoritesByUserId(Long userId) {
+    public List<FavoriteExercises> getFavoritesByUserEmail(String userEmail) {
         return entityManager.createQuery(
-                        "SELECT f FROM FavoriteExercises f WHERE f.user.userId = :userId", FavoriteExercises.class)
-                .setParameter("userId", userId)
+                        "SELECT f FROM FavoriteExercises f WHERE f.user.email = :userEmail and f.deleted = false", FavoriteExercises.class)
+                .setParameter("userEmail", userEmail)
                 .getResultList();
     }
 

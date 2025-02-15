@@ -18,7 +18,7 @@ public interface WorkoutsDao {
 
     void deleteWorkout(Long workoutId);
 
-    // ✅ Fetch last workout date for streak validation
+    //  Fetch last workout date for streak validation
     @Query("SELECT MAX(w.date) FROM Workouts w WHERE w.user.userId = :userId")
     Optional<LocalDate> getLastWorkoutDate(@Param("userId") Long userId);
 }

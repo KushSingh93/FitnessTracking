@@ -2,14 +2,11 @@ package in.ongrid.fitnesstracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @AllArgsConstructor
-public class StreaksRequest {
-    private int streakCount;  // The number of consecutive days
-    private LocalDate startDate;  // The date when the streak started
+public class StreaksRequest { // ✅ Keep this name as per your preference
+    private final int streakCount;
+    private final LocalDate startDate;
 }

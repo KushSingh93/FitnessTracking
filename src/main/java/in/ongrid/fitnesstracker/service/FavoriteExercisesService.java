@@ -26,8 +26,8 @@ public class FavoriteExercisesService {
     }
 
     // ✅ Retrieve all favorite exercises for a user
-    public List<FavoriteExercises> getFavoritesByUserId(Long userId) {
-        return favoriteExercisesDao.getFavoritesByUserId(userId);
+    public List<FavoriteExercises> getFavoritesByUserEmail(String userEmail) {
+        return favoriteExercisesDao.getFavoritesByUserEmail(userEmail);
     }
 
     public FavoriteExercises getFavoriteByUserIdAndExcercise(Long userId, Long exerciseId) {
