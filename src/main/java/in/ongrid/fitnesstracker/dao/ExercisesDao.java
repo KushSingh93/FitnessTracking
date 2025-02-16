@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExercisesDao {
-    List<Exercises> getAllExercisesForUser(Long userId, List<Long> adminIds); // ✅ Fetch user-specific + admin exercises
+    List<Exercises> getAllExercisesForUser(Long userId, List<Long> adminIds);
     Optional<Exercises> getExerciseById(Long exerciseId);
-    List<Exercises> getExercisesByBodyPart(BodyPart bodyPart, Long userId, List<Long> adminIds); // ✅ Filtered by body part
+    List<Exercises> getExercisesByBodyPart(BodyPart bodyPart, Long userId, List<Long> adminIds);
     Exercises saveExercise(Exercises exercise);
     void deleteExercise(Long exerciseId);
 }

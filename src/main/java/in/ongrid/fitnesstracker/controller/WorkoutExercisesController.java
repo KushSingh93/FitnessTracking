@@ -60,6 +60,9 @@ public class WorkoutExercisesController {
         workoutExercisesService.removeExerciseFromWorkout(workoutExerciseId, userEmail);
         return ResponseEntity.noContent().build();
     }
+
+    // Get all exercises of a user in a workout by date
+
     @GetMapping("byDate/{date}")
     public ResponseEntity<List<WorkoutExercisesRequest>> getExercisesByDate(
             @PathVariable LocalDate date,

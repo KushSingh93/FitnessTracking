@@ -28,5 +28,5 @@ public class SignupRequest {
 
     private Gender gender;
 
-    private UserType userType = UserType.USER; // ✅ Default to USER if not provided
+    private UserType userType = UserType.USER;
 }

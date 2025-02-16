@@ -49,22 +49,4 @@ public class WorkoutsDaoImplementation implements WorkoutsDao {
         }
     }
 
-    // ✅ Fetch last workout date for streak validation with logs
-    @Override
-    public Optional<LocalDate> getLastWorkoutDate(Long userId) {
-        try {
-            LocalDate lastWorkoutDate = entityManager.createQuery(
-                            "SELECT MAX(w.date) FROM Workouts w WHERE w.user.userId = :userId AND w.date < :today",
-                            LocalDate.class)
-                    .setParameter("userId", userId)
-                    .setParameter("today", LocalDate.now()) // Exclude today from query
-                    .getSingleResult();
-
-            return Optional.ofNullable(lastWorkoutDate);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
-
 }

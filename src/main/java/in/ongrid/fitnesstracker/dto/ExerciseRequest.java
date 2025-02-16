@@ -16,7 +16,7 @@ public class ExerciseRequest {
     @NotNull(message = "Body part cannot be null")
     private BodyPart bodyPart;
 
-    @NotNull  // ✅ Ensure this is required
+    @NotNull
     private Double caloriesBurntPerRep;
 
 }

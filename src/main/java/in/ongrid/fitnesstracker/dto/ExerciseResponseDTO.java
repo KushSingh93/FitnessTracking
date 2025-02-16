@@ -14,6 +14,6 @@ public class ExerciseResponseDTO {
     private String exerciseName;
     private BodyPart bodyPart;
     private Double caloriesBurntPerRep;
-    private Long userId;  // Include the user ID instead of the entire User object
+    private Long userId;
     private boolean isFavourite;
 }

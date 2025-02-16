@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class StreaksRequest { // ✅ Keep this name as per your preference
+public class StreaksRequest {
     private final int streakCount;
     private final LocalDate startDate;
 }

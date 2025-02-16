@@ -47,7 +47,7 @@ public class WorkoutsService {
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
         LocalDate workoutDate = (workoutRequest.getDate() != null) ? workoutRequest.getDate() : LocalDate.now();
-        logger.info("📅 Workout Date: {}", workoutDate);
+        logger.info(" Workout Date: {}", workoutDate);
 
         Workouts workout = new Workouts();
         workout.setUser(user);
@@ -56,7 +56,7 @@ public class WorkoutsService {
         Workouts savedWorkout = workoutsDao.saveWorkout(workout);
         entityManager.flush(); // Ensures workout is saved before streak updates
 
-        logger.info("🚀 Workout created for {} on {}", userEmail, savedWorkout.getDate());
+        logger.info(" Workout created for {} on {}", userEmail, savedWorkout.getDate());
 
         // Call StreaksService to update streaks (instead of handling it here)
         streaksService.getUserStreak(userEmail);
@@ -75,7 +75,7 @@ public class WorkoutsService {
         }
 
         workoutsDao.deleteWorkout(workoutId);
-        logger.info("❌ Workout deleted for {} on {}", userEmail, workout.getDate());
+        logger.info(" Workout deleted for {} on {}", userEmail, workout.getDate());
 
         //Recalculate streak after deletion
         streaksService.getUserStreak(userEmail);

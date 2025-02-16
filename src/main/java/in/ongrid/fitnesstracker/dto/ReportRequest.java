@@ -9,8 +9,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class ReportRequest {
     private String period;                 // weekly, monthly, yearly
-    private int totalWorkouts;             // Total workouts in the period
-    private double totalCaloriesBurned;    // Total calories burnt
+    private int totalWorkouts;
+    private double totalCaloriesBurned;
     private String mostTrainedBodyPart;    // Most frequently trained body part
     private Map<String, Long> bodyPartFrequency; // Frequency of each body part trained
     private Map<String, Double> dailyCalories;

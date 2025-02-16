@@ -26,7 +26,7 @@ public class WorkoutsController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Get all workouts for a user
+    //  Get all workouts for a user
     @GetMapping("/userWorkout")
     public ResponseEntity<List<Workouts>> getUserWorkouts(@RequestHeader("Authorization") String token) {
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
@@ -34,7 +34,9 @@ public class WorkoutsController {
         return ResponseEntity.ok(workoutsService.getWorkoutsByUserEmail(userEmail));
     }
 
-    // ✅ Create a new workout
+    //  Create a new workout for today (automatically new workout gets created in user adds his first exercise)
+    // At max 1 workout per day
+
     @PostMapping("/createWorkout")
     public ResponseEntity<Workouts> createWorkout(
             @Valid @RequestBody WorkoutRequest workoutRequest,
@@ -46,7 +48,7 @@ public class WorkoutsController {
         return ResponseEntity.ok(workoutsService.createWorkout(workoutRequest, userEmail));
     }
 
-    // ✅ Delete a workout
+    //  Delete a workout
     @DeleteMapping("/{workoutId}")
     public ResponseEntity<Void> deleteWorkout(@PathVariable Long workoutId, @RequestHeader("Authorization") String token) {
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;

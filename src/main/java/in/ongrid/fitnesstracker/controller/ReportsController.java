@@ -24,7 +24,6 @@ public class ReportsController {
             @RequestHeader("Authorization") String token,
             @RequestParam(name = "period", required = true) String period) {
 
-        // Extract JWT Token (Remove "Bearer ")
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
         String userEmail = jwtUtil.extractEmail(jwtToken);
 

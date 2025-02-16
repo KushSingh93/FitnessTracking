@@ -31,7 +31,7 @@ public class ExercisesService {
         this.favoriteExercisesDao = favoriteExercisesDao;
     }
 
-    // ✅ Get all exercises for a user (includes their custom + admin exercises)
+    //  Get all exercises for a user (includes their custom + admin exercises)
     public List<Exercises> getAllExercisesForUser(String userEmail) {
         User user = usersDao.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
@@ -69,13 +69,13 @@ public class ExercisesService {
         return getAllExercisesList;
     }
 
-    // ✅ Get exercise by ID
+    //  Get exercise by ID
     public Exercises getExerciseById(Long exerciseId) {
         return exercisesDao.getExerciseById(exerciseId)
                 .orElseThrow(() -> new RuntimeException("Exercise not found!"));
     }
 
-    // ✅ Get exercises by body part using enum
+    //  Get exercises by body part using enum
     public List<Exercises> getExercisesByBodyPart(String bodyPart, String userEmail) {
         User user = usersDao.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
@@ -92,7 +92,7 @@ public class ExercisesService {
         }
     }
 
-    // ✅ Save a new custom exercise
+    //  Save a new custom exercise
     @Transactional
     public Exercises addExercise(ExerciseRequest exerciseRequest, String userEmail) {
         User user = usersDao.getUserByEmail(userEmail)
@@ -121,14 +121,4 @@ public class ExercisesService {
         return exercisesDao.saveExercise(exercise);
     }
 
-    // ✅ Delete an exercise (Only if created by the user)
-    public void deleteExercise(Long exerciseId, String userEmail) {
-        Exercises exercise = getExerciseById(exerciseId);
-
-        if (!exercise.getUser().getEmail().equals(userEmail)) {
-            throw new RuntimeException("You can only delete your own exercises!");
-        }
-
-        exercisesDao.deleteExercise(exerciseId);
-    }
 }

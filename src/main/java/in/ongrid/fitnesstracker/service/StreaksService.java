@@ -32,7 +32,7 @@ public class StreaksService {
         User user = usersDao.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
-        // ✅ Fetch all workouts for the user (already sorted by date DESC)
+        //  Fetch all workouts for the user (already sorted by date DESC)
         List<Workouts> workouts = workoutsDao.getWorkoutsByUser(user);
 
         if (workouts.isEmpty()) {
@@ -42,7 +42,7 @@ public class StreaksService {
         int streakCount = 1;
         LocalDate streakStartDate = workouts.get(0).getDate();
 
-        // ✅ Check consecutive workout days to calculate streak
+        //  Check consecutive workout days to calculate streak
         for (int i = 1; i < workouts.size(); i++) {
             LocalDate prevDate = workouts.get(i - 1).getDate();
             LocalDate currDate = workouts.get(i).getDate();
@@ -55,11 +55,11 @@ public class StreaksService {
             }
         }
 
-        // ✅ Fetch or create a new streak record
+        //  Fetch or create a new streak record
         Streaks streak = streaksDao.getStreakByUserId(user.getUserId())
                 .orElse(new Streaks(null, user, streakStartDate, streakCount));
 
-        // ✅ Update streak count and start date
+        //  Update streak count and start date
         streak.setStreakCount(streakCount);
         streak.setStartDate(streakStartDate);
         streaksDao.saveOrUpdateStreak(streak);

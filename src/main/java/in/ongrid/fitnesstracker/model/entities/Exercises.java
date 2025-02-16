@@ -38,8 +38,5 @@ public class Exercises {
 
     private boolean deleted = false;
 
-//    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<WorkoutExercises> workoutExercises;
-
 }
 

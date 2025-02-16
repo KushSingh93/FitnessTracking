@@ -20,7 +20,7 @@ public class FavoriteExercisesDaoImplementation implements FavoriteExercisesDao 
     @PersistenceContext
     private EntityManager entityManager;
 
-    // ✅ Retrieve all favorite exercises of a user by email
+    //  Retrieve all favorite exercises of a user by email (ensures soft deleted fav exercises dont come )
     @Override
     public List<FavoriteExercises> getFavoritesByUserEmail(String userEmail) {
         return entityManager.createQuery(
@@ -29,15 +29,14 @@ public class FavoriteExercisesDaoImplementation implements FavoriteExercisesDao 
                 .getResultList();
     }
 
-    // ✅ Save a new favorite exercise
+    //  Save a new favorite exercise
     @Override
     public FavoriteExercises saveFavoriteExercise(FavoriteExercises favoriteExercise) {
         entityManager.persist(favoriteExercise);
         return favoriteExercise;
     }
 
-    // ✅ Delete a favorite exercise by ID
-
+    // soft delete (set deleted: 1)
     @Override
     public void setDeletedById(Long id, Long userId) {
         Query query = entityManager.createQuery("Update FavoriteExercises f set f.deleted = :deleted where f.user.userId = :userId and f.exercise.exerciseId = :exerciseId");

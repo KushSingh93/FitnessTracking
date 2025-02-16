@@ -37,9 +37,6 @@ public class WorkoutExercisesService {
         User user = usersDao.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
-        // Fetch workout and verify ownership
-//        Workouts workout = workoutsDao.getWorkoutById(workoutId)
-//                .orElseThrow(() -> new RuntimeException("Workout not found!"));
 
         Workouts workout = workoutExercisesDao.getWorkoutByUserAndDate(user.getUserId(), LocalDate.now());
 

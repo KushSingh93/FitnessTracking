@@ -24,7 +24,7 @@ public class ExercisesController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Get all exercises (Predefined & Custom)
+    //  Get all exercises (Predefined & Custom)
     @GetMapping("/getAllExercises")
     public ResponseEntity<List<ExerciseResponseDTO>> getAllExercises(@RequestHeader("Authorization") String token) {
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
@@ -36,13 +36,13 @@ public class ExercisesController {
         return ResponseEntity.ok(exercises);
     }
 
-    // ✅ Get exercise by ID
+    //  Get exercise by ID
     @GetMapping("/{exerciseId}")
     public ResponseEntity<Exercises> getExerciseById(@PathVariable Long exerciseId) {
         return ResponseEntity.ok(exercisesService.getExerciseById(exerciseId));
     }
 
-    // ✅ Get exercises by body part (Now filtered by user + admin)
+    // Get exercises by body part
     @GetMapping("/bodyPart/{bodyPart}")
     public ResponseEntity<List<Exercises>> getExercisesByBodyPart(
             @PathVariable String bodyPart,
@@ -54,7 +54,7 @@ public class ExercisesController {
         return ResponseEntity.ok(exercisesService.getExercisesByBodyPart(bodyPart, userEmail));
     }
 
-    // ✅ Add a custom exercise
+    //  Add a custom exercise
     @PostMapping("/addExercise")
     public ResponseEntity<Exercises> addExercise(
             @Valid @RequestBody ExerciseRequest exerciseRequest, // Validate input fields
@@ -66,29 +66,5 @@ public class ExercisesController {
 
         Exercises savedExercise = exercisesService.addExercise(exerciseRequest, userEmail);
         return ResponseEntity.ok(savedExercise);
-    }
-
-    // ✅ Delete a custom exercise (only if created by the user)
-    @DeleteMapping("/{exerciseId}")
-    public ResponseEntity<Void> deleteExercise(
-            @PathVariable Long exerciseId,
-            @RequestHeader("Authorization") String token) {
-
-        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
-
-        exercisesService.deleteExercise(exerciseId, userEmail);
-        return ResponseEntity.noContent().build();
-    }
-
-    private ExerciseResponseDTO convertToDto(Exercises exercise) {
-        ExerciseResponseDTO dto = new ExerciseResponseDTO();
-        dto.setExerciseId(exercise.getExerciseId());
-        dto.setExerciseName(exercise.getExerciseName());
-        dto.setBodyPart(exercise.getBodyPart());
-        dto.setCaloriesBurntPerRep(exercise.getCaloriesBurntPerRep());
-        dto.setUserId(exercise.getUser().getUserId());  // Only include the user ID
-
-        return dto;
     }
 }

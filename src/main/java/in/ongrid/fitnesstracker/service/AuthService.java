@@ -37,14 +37,14 @@ public class AuthService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
 
-        // ✅ Use provided gender, default to MALE if null
+       //default to MALE if null
         user.setGender(request.getGender() != null ? request.getGender() : Gender.MALE);
 
-        // ✅ Hash password
+        //  Hash password
         String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
 
-        // ✅ Only set USER if userType is null
+        //  Only set USER if userType is null
         user.setUserType(request.getUserType() != null ? request.getUserType() : UserType.USER);
 
         // Save to DB

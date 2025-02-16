@@ -25,16 +25,12 @@ public class FavoriteExercisesService {
         this.exercisesDao = exercisesDao;
     }
 
-    // ✅ Retrieve all favorite exercises for a user
+    //  Retrieve all favorite exercises for a user
     public List<FavoriteExercises> getFavoritesByUserEmail(String userEmail) {
         return favoriteExercisesDao.getFavoritesByUserEmail(userEmail);
     }
 
-    public FavoriteExercises getFavoriteByUserIdAndExcercise(Long userId, Long exerciseId) {
-        return favoriteExercisesDao.getFavoritesByUserIdAndExcerciseId(userId, exerciseId);
-    }
-
-    // ✅ Add an exercise to favorites
+    // Add an exercise to favorites
     public FavoriteExercises addFavoriteExercise(FavoriteRequest favoriteRequest, String userEmail) {
         // Fetch user by email
         User user = usersDao.getUserByEmail(userEmail)
@@ -62,17 +58,6 @@ public class FavoriteExercisesService {
         // Fetch the user by email
         User user = usersDao.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
-//        boolean isValid = favoriteExercisesDao.isUserValid(user, favExerciseId);
-        // Soft delete by setting the 'deleted' flag to true
-//        if (isValid) {
             favoriteExercisesDao.setDeletedById(favExerciseId, user.getUserId());
-//        }
-//        else{
-//            throw new RuntimeException("User is not Authorized");
-//        }
     }
-
-
-
-
 }

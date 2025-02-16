@@ -10,7 +10,6 @@ public interface FavoriteExercisesDao {
     List<FavoriteExercises> getFavoritesByUserEmail(String userEmail);
     FavoriteExercises getFavoritesByUserIdAndExcerciseId(Long userId, Long exerciseId);
     FavoriteExercises saveFavoriteExercise(FavoriteExercises favoriteExercise);
-//    void deleteFavoriteExercise(Long favoriteId);
     void setDeletedById(Long id, Long userId);
     Optional<FavoriteExercises> findByUserAndExercise(User user, Exercises exercise);
 }

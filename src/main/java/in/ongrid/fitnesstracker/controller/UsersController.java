@@ -30,7 +30,7 @@ public class UsersController {
         this.jwtUtil = jwtUtil;
     }
 
-    //  Register a new user
+    // sign up
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request) {
 //        User user = authService.signup(request);
@@ -38,6 +38,7 @@ public class UsersController {
         return ResponseEntity.ok("Generated successfully" + token);
     }
 
+    // login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
         String token = authService.login(request);
@@ -63,57 +64,38 @@ public class UsersController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //  Update user profile
-    @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User user) {
-        return ResponseEntity.ok(usersService.updateUser(userId, user));
-    }
-
-    //  Delete user
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        usersService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
-    }
-
-    // ✅ Fetch User Profile (via JWT Token)
+    //  Fetch User Profile (via JWT Token)
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String token) {
         try {
-            // 🔹 Ensure Token Exists & is Valid
+
             if (token == null || !token.startsWith("Bearer ")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing token");
             }
-
-            // 🔹 Extract Email from JWT
             String email = jwtUtil.extractEmail(token.substring(7));
 
-            // 🔹 Fetch User from DB
             Optional<User> user = usersService.getUserByEmail(email);
 
             if (user.isPresent()) {
-                return ResponseEntity.ok(user.get()); // ✅ Return the User entity
+                return ResponseEntity.ok(user.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // ✅ Ensure consistent return type
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // ✅ Consistent type (returning null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
-    // ✅ Update User Profile
+    //  Update User Profile
     @PutMapping("/profile")
     public ResponseEntity<?> updateUserProfile(@RequestHeader("Authorization") String token, @RequestBody User updatedUser) {
         try {
-            // 🔹 Ensure Token Exists & is Valid
             if (token == null || !token.startsWith("Bearer ")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing token");
             }
 
-            // 🔹 Extract Email from JWT
             String email = jwtUtil.extractEmail(token.substring(7));
 
-            // 🔹 Fetch User from DB
             Optional<User> userOpt = usersService.getUserByEmail(email);
             if (userOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
@@ -133,14 +115,9 @@ public class UsersController {
         }
     }
 
-    //  Logout user
+    //  Logout user (front end just removes token from local storage)
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("User logged out successfully.");
     }
-    // This API does not invalidate tokens
-    //The frontend will handle token removal and redirection
-
-
-
 }

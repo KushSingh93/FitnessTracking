@@ -30,10 +30,10 @@ public class Workouts {
     @PrePersist
     protected void onCreate() {
         if (this.createdAt == null) {
-            this.createdAt = LocalDate.now(); // ✅ Set creation date
+            this.createdAt = LocalDate.now();
         }
         if (this.date == null) {
-            this.date = LocalDate.now(); // ✅ Ensure the workout date is set
+            this.date = LocalDate.now();
         }
     }
 }

@@ -22,7 +22,7 @@ public class FavoriteExercisesController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Retrieve favorite exercises of a user using the token
+    //  Retrieve favorite exercises of a user
     @GetMapping
     public ResponseEntity<List<FavoriteExercises>> getFavoritesByUser(
             @RequestHeader("Authorization") String token) {
@@ -36,7 +36,7 @@ public class FavoriteExercisesController {
         return ResponseEntity.ok(favorites);
     }
 
-    // ✅ Add an exercise to favorites
+    //  Add an exercise to favorites
     @PostMapping("/add")
     public ResponseEntity<FavoriteExercises> addFavoriteExercise(
             @Valid @RequestBody FavoriteRequest favoriteRequest,
@@ -50,7 +50,7 @@ public class FavoriteExercisesController {
         return ResponseEntity.ok(savedFavorite);
     }
 
-    // ✅ Remove an exercise from favorites
+    //  Remove an exercise from favorites
     @DeleteMapping("/remove/{exerciseId}")
     public ResponseEntity<Void> removeFavoriteExercise(
             @PathVariable Long exerciseId,
