@@ -1,6 +1,6 @@
 package in.ongrid.fitnesstracker.dao;
 
-import in.ongrid.fitnesstracker.model.entities.User;  // ✅ Correct import
+import in.ongrid.fitnesstracker.model.entities.User;
 import in.ongrid.fitnesstracker.model.entities.Exercises;
 import in.ongrid.fitnesstracker.model.entities.FavoriteExercises;
 import jakarta.persistence.EntityManager;

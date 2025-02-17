@@ -1,4 +1,4 @@
-package in.ongrid.fitnesstracker.dao; // ✅ Ensure this matches your actual package structure
+package in.ongrid.fitnesstracker.dao;
 
 import in.ongrid.fitnesstracker.model.entities.Streaks;
 import jakarta.persistence.EntityManager;
