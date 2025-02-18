@@ -20,7 +20,7 @@ public class ExercisesDaoImplementation implements ExercisesDao {
     @Override
     public List<Exercises> getAllExercisesForUser(Long userId, List<Long> adminIds) {
         return entityManager.createQuery(
-                        "SELECT e FROM Exercises e WHERE e.user.userId = :userId OR e.user.userId IN :adminIds", Exercises.class)
+                        "SELECT e FROM Exercises e WHERE (e.user.userId = :userId OR e.user.userId IN :adminIds) AND e.deleted = false", Exercises.class)
                 .setParameter("userId", userId)
                 .setParameter("adminIds", adminIds)
                 .getResultList();
@@ -34,7 +34,7 @@ public class ExercisesDaoImplementation implements ExercisesDao {
     @Override
     public List<Exercises> getExercisesByBodyPart(BodyPart bodyPart, Long userId, List<Long> adminIds) {
         return entityManager.createQuery(
-                        "SELECT e FROM Exercises e WHERE (e.user.userId = :userId OR e.user.userId IN :adminIds) AND e.bodyPart = :bodyPart", Exercises.class)
+                        "SELECT e FROM Exercises e WHERE (e.user.userId = :userId OR e.user.userId IN :adminIds) AND e.bodyPart = :bodyPart AND e.deleted = false", Exercises.class)
                 .setParameter("userId", userId)
                 .setParameter("adminIds", adminIds)
                 .setParameter("bodyPart", bodyPart)
@@ -48,10 +48,11 @@ public class ExercisesDaoImplementation implements ExercisesDao {
     }
 
     @Override
-    public void deleteExercise(Long exerciseId) {
+    public void softDeleteExercise(Long exerciseId) {
         Exercises exercise = entityManager.find(Exercises.class, exerciseId);
         if (exercise != null) {
-            entityManager.remove(exercise);
+            exercise.setDeleted(true);
+            entityManager.merge(exercise);
         }
     }
 }

@@ -35,14 +35,14 @@ public class UsersController {
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request) {
 //        User user = authService.signup(request);
         String token = authService.signup(request);
-        return ResponseEntity.ok("Generated successfully" + token);
+        return ResponseEntity.ok("Token: " + token);
     }
 
     // login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
         String token = authService.login(request);
-        return ResponseEntity.ok("User logged in successfully! Token: " + token);
+        return ResponseEntity.ok("Token: " + token);
     }
 
     //  Get all users
@@ -119,5 +119,26 @@ public class UsersController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("User logged out successfully.");
+    }
+
+    // New endpoint to get current user's ID
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrentUserId(@RequestHeader("Authorization") String token) {
+        try {
+            if (token == null || !token.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing token");
+            }
+            String email = jwtUtil.extractEmail(token.substring(7));
+
+            Optional<User> user = usersService.getUserByEmail(email);
+
+            if (user.isPresent()) {
+                return ResponseEntity.ok(user.get().getUserId());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error fetching user ID: " + e.getMessage());
+        }
     }
 }

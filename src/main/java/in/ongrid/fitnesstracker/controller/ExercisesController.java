@@ -30,7 +30,6 @@ public class ExercisesController {
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
         String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
 
-//        List<Exercises> exercises = exercisesService.getAllExercisesForUser(userEmail);
         List<ExerciseResponseDTO> exercises = exercisesService.getAllExercisesForUserWithFavourite(userEmail);
 
         return ResponseEntity.ok(exercises);
@@ -49,7 +48,7 @@ public class ExercisesController {
             @RequestHeader("Authorization") String token) {
 
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
+        String userEmail = jwtUtil.extractEmail(jwtToken);
 
         return ResponseEntity.ok(exercisesService.getExercisesByBodyPart(bodyPart, userEmail));
     }
@@ -57,14 +56,29 @@ public class ExercisesController {
     //  Add a custom exercise
     @PostMapping("/addExercise")
     public ResponseEntity<Exercises> addExercise(
-            @Valid @RequestBody ExerciseRequest exerciseRequest, // Validate input fields
-            @RequestHeader("Authorization") String token) { // Get token from header
+            @Valid @RequestBody ExerciseRequest exerciseRequest,
+            @RequestHeader("Authorization") String token) {
 
         // Extract actual JWT token (remove "Bearer " prefix)
         String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userEmail = jwtUtil.extractEmail(jwtToken); // Extract email from token
+        String userEmail = jwtUtil.extractEmail(jwtToken);
 
         Exercises savedExercise = exercisesService.addExercise(exerciseRequest, userEmail);
         return ResponseEntity.ok(savedExercise);
     }
+
+    // Delete custom exercise
+    @DeleteMapping("/{exerciseId}")
+    public ResponseEntity<Void> softDeleteExercise(
+            @PathVariable Long exerciseId,
+            @RequestHeader("Authorization") String token) {
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String userEmail = jwtUtil.extractEmail(jwtToken);
+
+        exercisesService.softDeleteExercise(exerciseId, userEmail);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
 }
