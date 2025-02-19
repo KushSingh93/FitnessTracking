@@ -22,7 +22,7 @@ public class Exercises {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exerciseId;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, length = 100)
     private String exerciseName;
 
     @Enumerated(EnumType.STRING)

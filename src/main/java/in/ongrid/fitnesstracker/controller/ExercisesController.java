@@ -60,11 +60,16 @@ public class ExercisesController {
             @RequestHeader("Authorization") String token) {
 
         // Extract actual JWT token (remove "Bearer " prefix)
-        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userEmail = jwtUtil.extractEmail(jwtToken);
+        try{
+            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+            String userEmail = jwtUtil.extractEmail(jwtToken);
 
-        Exercises savedExercise = exercisesService.addExercise(exerciseRequest, userEmail);
-        return ResponseEntity.ok(savedExercise);
+            Exercises savedExercise = exercisesService.addExercise(exerciseRequest, userEmail);
+            return ResponseEntity.ok(savedExercise);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // Delete custom exercise

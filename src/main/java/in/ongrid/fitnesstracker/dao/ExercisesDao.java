@@ -11,4 +11,5 @@ public interface ExercisesDao {
     List<Exercises> getExercisesByBodyPart(BodyPart bodyPart, Long userId, List<Long> adminIds);
     Exercises saveExercise(Exercises exercise);
     void softDeleteExercise(Long exerciseId);
+    Optional<Exercises> getExerciseByName(String exerciseName, Long userId, List<Long> adminIds);
 }

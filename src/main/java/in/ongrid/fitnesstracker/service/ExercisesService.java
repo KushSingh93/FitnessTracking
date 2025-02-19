@@ -1,6 +1,7 @@
 package in.ongrid.fitnesstracker.service;
 
 import in.ongrid.fitnesstracker.dao.ExercisesDao;
+import in.ongrid.fitnesstracker.dao.ExercisesDaoImplementation;
 import in.ongrid.fitnesstracker.dao.FavoriteExercisesDao;
 import in.ongrid.fitnesstracker.dao.UsersDao;
 import in.ongrid.fitnesstracker.dto.ExerciseRequest;
@@ -11,6 +12,7 @@ import in.ongrid.fitnesstracker.model.entities.User;
 import in.ongrid.fitnesstracker.model.enums.BodyPart;
 import in.ongrid.fitnesstracker.model.enums.UserType;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ExercisesService {
 
     private final ExercisesDao exercisesDao;
     private final UsersDao usersDao;
     private final FavoriteExercisesDao favoriteExercisesDao;
+    private final ExercisesDaoImplementation exercisesDaoImplementation;
 
     @Autowired
-    public ExercisesService(ExercisesDao exercisesDao, UsersDao usersDao, FavoriteExercisesDao favoriteExercisesDao) {
+    public ExercisesService(ExercisesDao exercisesDao, UsersDao usersDao, FavoriteExercisesDao favoriteExercisesDao, ExercisesDaoImplementation exercisesDaoImplementation) {
         this.exercisesDao = exercisesDao;
         this.usersDao = usersDao;
         this.favoriteExercisesDao = favoriteExercisesDao;
+        this.exercisesDaoImplementation = exercisesDaoImplementation;
     }
 
     public List<ExerciseResponseDTO> getAllExercisesForUserWithFavourite(String userEmail) {
@@ -90,30 +95,40 @@ public class ExercisesService {
     //  Save a new custom exercise
     @Transactional
     public Exercises addExercise(ExerciseRequest exerciseRequest, String userEmail) {
-        User user = usersDao.getUserByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found!"));
+       try{
+           User user = usersDao.getUserByEmail(userEmail)
+                   .orElseThrow(() -> new RuntimeException("User not found!"));
+           Exercises exercisedupcheck = exercisesDaoImplementation.getExerciseByName(exerciseRequest , user.getUserId());
 
-        Exercises exercise = new Exercises();
-        exercise.setUser(user);
-        exercise.setExerciseName(exerciseRequest.getExerciseName());
+           if(exercisedupcheck != null){
+               System.out.println("Exercise already exists!");
+               throw new RuntimeException("Exercise already exists!");
+           }
 
-        if (exerciseRequest.getCaloriesBurntPerRep() == null) {
-            throw new RuntimeException("Calories burnt per set cannot be null.");
-        }
-        exercise.setCaloriesBurntPerRep(exerciseRequest.getCaloriesBurntPerRep());
+           Exercises exercise = new Exercises();
+           exercise.setUser(user);
+           exercise.setExerciseName(exerciseRequest.getExerciseName());
 
-        if (exerciseRequest.getBodyPart() == null) {
-            throw new RuntimeException("Body part cannot be null.");
-        }
+           if (exerciseRequest.getCaloriesBurntPerRep() == null) {
+               throw new RuntimeException("Calories burnt per set cannot be null.");
+           }
+           exercise.setCaloriesBurntPerRep(exerciseRequest.getCaloriesBurntPerRep());
 
-        try {
-            exercise.setBodyPart(exerciseRequest.getBodyPart());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Invalid body part: " + exerciseRequest.getBodyPart() +
-                    ". Allowed values: CHEST, BACK, ARMS, LEGS, SHOULDER, ABS");
-        }
+           if (exerciseRequest.getBodyPart() == null) {
+               throw new RuntimeException("Body part cannot be null.");
+           }
 
-        return exercisesDao.saveExercise(exercise);
+           try {
+               exercise.setBodyPart(exerciseRequest.getBodyPart());
+           } catch (IllegalArgumentException e) {
+               throw new RuntimeException("Invalid body part: " + exerciseRequest.getBodyPart() +
+                       ". Allowed values: CHEST, BACK, ARMS, LEGS, SHOULDER, ABS");
+           }
+           return exercisesDao.saveExercise(exercise);
+       }catch (Exception e) {
+           log.warn(e.getMessage());
+       }
+       return null;
     }
 
     // Soft delete custom exercise:
@@ -132,7 +147,6 @@ public class ExercisesService {
 
         exercisesDao.softDeleteExercise(exerciseId);
     }
-
 
 
 }
