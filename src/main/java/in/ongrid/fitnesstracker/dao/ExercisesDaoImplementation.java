@@ -72,9 +72,6 @@ public class ExercisesDaoImplementation implements ExercisesDao {
     }
 
     public Exercises getExerciseByName(ExerciseRequest exerciseReq , Long userId) {
-        System.out.println("............................................................");
-        System.out.println("This is the userId " +  userId);
-        System.out.println("............................................................");
         List<Exercises> exercises = entityManager.createQuery(
                         "SELECT e FROM Exercises e WHERE e.user.id = :userId AND e.deleted = false AND e.exerciseName = :nameE", Exercises.class)
                 .setParameter("userId", userId)

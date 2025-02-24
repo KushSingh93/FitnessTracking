@@ -140,8 +140,8 @@ public class ExercisesService {
         Exercises exercise = exercisesDao.getExerciseById(exerciseId)
                 .orElseThrow(() -> new RuntimeException("Exercise not found!"));
 
-        // Check if the exercise belongs to the user and is not an admin exercise
-        if (!exercise.getUser().getUserId().equals(user.getUserId()) || exercise.getUser().getUserType() == UserType.ADMIN) {
+        // Check if the exercise belongs to the user
+        if (!exercise.getUser().getUserId().equals(user.getUserId())) {
             throw new RuntimeException("You don't have permission to delete this exercise.");
         }
 
