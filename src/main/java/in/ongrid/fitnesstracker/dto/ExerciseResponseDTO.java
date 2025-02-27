@@ -15,5 +15,5 @@ public class ExerciseResponseDTO {
     private BodyPart bodyPart;
     private Double caloriesBurntPerRep;
     private Long userId;
-    private boolean isFavourite;
+    private boolean Favourite;
 }

@@ -22,7 +22,6 @@ public class FavoriteExercises {
     @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
     private User user;
 
-
     @ManyToOne
     @JoinColumn(name = "exercise_id", referencedColumnName = "exerciseId", nullable = false)
     private Exercises exercise;

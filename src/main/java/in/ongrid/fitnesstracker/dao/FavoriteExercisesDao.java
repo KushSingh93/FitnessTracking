@@ -11,5 +11,4 @@ public interface FavoriteExercisesDao {
     FavoriteExercises getFavoritesByUserIdAndExcerciseId(Long userId, Long exerciseId);
     FavoriteExercises saveFavoriteExercise(FavoriteExercises favoriteExercise);
     void setDeletedById(Long id, Long userId);
-    Optional<FavoriteExercises> findByUserAndExercise(User user, Exercises exercise);
 }

@@ -46,15 +46,6 @@ public class FavoriteExercisesDaoImplementation implements FavoriteExercisesDao 
         query.executeUpdate();
     }
 
-    @Override
-    public Optional<FavoriteExercises> findByUserAndExercise(User user, Exercises exercise) {
-        List<FavoriteExercises> results = entityManager.createQuery(
-                        "SELECT f FROM FavoriteExercises f WHERE f.user = :user AND f.exercise = :exercise", FavoriteExercises.class)
-                .setParameter("user", user)
-                .setParameter("exercise", exercise)
-                .getResultList();
-        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
-    }
 
     @Override
     public FavoriteExercises getFavoritesByUserIdAndExcerciseId(Long userId, Long exerciseId) {
